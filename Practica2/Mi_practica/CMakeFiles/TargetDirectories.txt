@@ -1,9 +1,0 @@
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/rebuild_cache.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/edit_cache.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/BelkanSG.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/GLUILib.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/Belkan.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/obj3DLib.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/motorLib.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/modelosBelkanLib.dir
-/home/juanma/Escritorio/Segundo_Cuatrimestre/IA/Practicas/Practica2/Mi_practica/CMakeFiles/comportamientosLib.dir
