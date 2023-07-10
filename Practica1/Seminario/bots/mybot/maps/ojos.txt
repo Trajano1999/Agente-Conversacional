@@ -1,5 +1,0 @@
-MartaG:marron
-MartaS:verde
-Jose:marron
-Dani:azul
-Manu:violeta
