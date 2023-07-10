@@ -1,0 +1,124 @@
+<?xml version="1.0"
+encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--Presentación-->
+
+<category>
+    <pattern> Hola </pattern>
+    <template> Hola, que tal? </template>
+</category>
+
+<category>
+    <pattern> Hola ^ </pattern>
+    <template> Hola2 </template>
+</category>
+
+<category>
+    <pattern> ^ que tal ^ </pattern>
+    <template> Estoy genial !! </template>
+</category>
+
+<category>
+    <pattern> ^ muy buenas ^ </pattern>
+    <template> Muy buenas humano !! </template>
+</category>
+
+<!--Edad-->
+
+<category>
+    <pattern> Cual es tu edad </pattern>
+    <template> Tengo <bot name="age"/> anios </template>
+</category>
+
+<!--Nombre-->
+
+<category>
+    <pattern> ^ me llamo * </pattern>
+    <template>
+        <think><set name="nombre"><star index="2"/></set></think>
+        <get name="nombre"/> es un nombre muy bonito
+    </template>
+</category>
+
+<category>
+    <pattern> Cual es mi nombre </pattern>
+    <template> Tu nombre es <get name="nombre"/> </template>
+</category>
+
+<category>
+    <pattern> * mi nombre </pattern>
+    <template><srai> cual es mi nombre </srai></template>
+</category>
+
+<category>
+    <pattern> ^ como me llamo </pattern>
+    <template><srai> cual es mi nombre </srai></template>
+</category>
+
+<category>
+    <pattern> Cual es mi nombre </pattern>
+    <template> 
+        <condition name="nombre">
+            <li value="unknown"> Aun no me has dicho tu nombre </li>
+            <li> Tu nombre es <get name="nombre"/></li>
+        </condition>
+    </template>
+</category>
+
+<!--Colores (SET)-->
+
+<category>
+    <pattern> Es <set>color</set> un color </pattern>
+    <template> Si, <star/> es un color </template>
+</category>
+
+<category>
+    <pattern> Es * un color </pattern>
+    <template> No, <star/> no es un color </template>
+</category>
+
+<!--Capitales (MAP)-->
+
+<category>
+    <pattern> cual es la capital de <set>pais</set> </pattern>
+    <template> La capital de <star/> es <map name="capital"><star/></map> </template>
+</category>
+
+<category>
+    <pattern> cual es la capital de * </pattern>
+    <template> En realidad no se cual es la capital de <star/> </template>
+</category>
+
+<!--Color de pelo compañeros-->
+
+<!--
+<category>
+    <pattern> ^ color ^ pelo ^ <set>compi</set> </pattern>
+    <template> El color de pelo de <star index="4"> es <map name="pelo"><star index="4"></map> </template>
+</category>
+-->
+
+<!-- Cafe -->
+
+    <!--
+    <topic name="cafe">
+    </topic>
+    -->
+
+<category>
+    <pattern> ^ cafe ^ </pattern>
+    <template> Te gusta el cafe? </template>
+</category>
+
+<category>
+    <pattern> Si </pattern> <that> Te gusta el cafe </that>
+    <template> ¿Lo prefieres solo o con leche? </template>
+</category>
+
+<category>
+    <pattern> patron </pattern>
+    <template> respuesta </template>
+</category>
+
+</aiml>

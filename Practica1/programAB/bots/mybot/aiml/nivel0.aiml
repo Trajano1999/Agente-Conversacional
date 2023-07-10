@@ -1,0 +1,132 @@
+<?xml version="1.0"
+encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--
+    COSAS POR HACER:
+        -Responder a las preguntas
+-->
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                         JUAN MANUEL MATEOS PEREZ                             |-->
+<!-- |______________________________________________________________________________|-->
+
+<!--
+    Pregunta 1
+
+    Manifiesta cosas sobre ti
+    Hablame un poco de ti
+    Expon algo sobre ti
+    Como eres?
+    Me gustaria saber como crees que eres
+-->
+
+<category>
+    <pattern> [Di+ Explica+ Habla+ Cuenta+ Describe Manifiesta+ Declara+ Expon+ Proclama+ Afirma+]
+     ^ [de sobre] ti </pattern>
+    <template> Respuesta 1 </template>
+</category>
+
+<category>
+    <pattern> ^ como ^ eres ^ </pattern>
+    <template><srai> Hablame de ti </srai></template>
+</category>
+
+<!--
+    Pregunta 2
+
+    Cual es tu mayor defecto?
+    Cuentame tus mayores imperfecciones
+    Me gustaria saber algunos de tus peores defectos
+    Que dirias que es uno de tus peores desperfectos?
+    Cuentame algunos defectos tuyos
+-->
+
+<category>
+    <pattern> ^ [tu tus el los] ([mayor mayores peor peores]) [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template> Respuesta 2 </template>
+</category>
+
+<category>
+    <pattern> ^ ([uno unos algun algunos]) de [los tus] ([peor peores mayores mayor]) [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<category>
+    <pattern> ^ [un unos algun algunos] ^ [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<category>
+    <pattern> que [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<!--
+    Pregunta 3
+    
+    Cuales son tus 3 mayores virtudes?
+    Podrias contarme algunas de tus mejores virtudes?
+    Cuentame algunas de tus mejores habilidades
+    Me gustaria saber unas de tus mayores capacidades
+    Cual dirias que son unas de las mejores virtudes que tienes?
+--> 
+
+<category>
+    <pattern> ^ [tu tus la las alguna algunas] ^ ([mayor mayores mejor mejores]) [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template> Respuesta 3 </template>
+</category>
+
+<category>
+    <pattern> ^ [una unas alguna algunas] de [las tus] ^ ([mayor mayores mejor mejores]) [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template><srai> Cuales son tus 3 mayores virtudes </srai></template>
+</category>
+
+<category>
+    <pattern> [Di+ Explica+ Habla+ Cuenta+ Describe Manifiesta+ Declara+ Expon+ Proclama+ Afirma+]
+     ^ [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template><srai> Cuales son tus 3 mayores virtudes </srai></template>
+</category>
+
+<!--
+    Pregunta 4
+
+    Te consideras una persona creativa?
+    Te crees alguien creativo?
+    Dirias que eres algo creativo aunque no estes vivo?
+    Te definirias como algo creativo?
+    Opinas como alguien con creatividad?
+-->
+
+<category>
+    <pattern> (Te) [eres crees consideras definirias opinas] (como) ([alguien algo]) ^ creativ+ ^ </pattern>
+    <template> Respuesta 4 </template>
+</category>
+
+<category>
+    <pattern> Dirias que eres ([alguien algo]) creativ+ ^ </pattern>
+    <template><srai> Te consideras una persona creativa </srai></template>
+</category>
+
+<!--
+    Pregunta 5
+
+    Por que deberiamos escogerte a ti?
+    Por que tendriamos seleccionarte?
+    Por que no deberiamos contratar a otro?
+    Por que no tendriamos que elegir a otra persona mas cualificada?
+    Deberiamos elegirte para trabajar en la empresa?
+-->
+
+<category>
+    <pattern> (Por que) [deberiamos tendriamos] ^ [escogerte seleccionarte elegirte] ^ </pattern>
+    <template> Respuesta 5 </template>
+</category>
+
+<category>
+    <pattern> Por que no [deberiamos tendriamos] (que) [escoger seleccionar elegir contratar] a otr+ (persona) ^ </pattern>
+    <template><srai> por que deberiamos escogerte a ti </srai></template>
+</category>
+
+</aiml>

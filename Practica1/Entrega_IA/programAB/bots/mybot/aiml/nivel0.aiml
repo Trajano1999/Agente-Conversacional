@@ -1,0 +1,136 @@
+<?xml version="1.0"
+encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                         JUAN MANUEL MATEOS PEREZ                             |-->
+<!-- |______________________________________________________________________________|-->
+
+<!--
+    Pregunta 1
+
+    Manifiesta cosas sobre ti
+    Hablame un poco de ti
+    Expon algo sobre ti
+    Como eres?
+    Me gustaria saber como crees que eres
+-->
+
+<category>
+    <pattern> [Di+ Explica+ Habla+ Cuenta+ Describe Manifiesta+ Declara+ Expon+ Proclama+ Afirma+]
+     ^ [de sobre] ti </pattern>
+    <template> Pues lo cierto es que me considero alguien bastante gracioso,
+    risueño y congenio con todo tipo de personas lo que a nivel profesional
+    suele permitirme un mejor desarrollo en un buen ambiente</template>
+</category>
+
+<category>
+    <pattern> ^ como ^ eres ^ </pattern>
+    <template><srai> Hablame de ti </srai></template>
+</category>
+
+<!--
+    Pregunta 2
+
+    Cual es tu mayor defecto?
+    Cuentame tus mayores imperfecciones
+    Me gustaria saber algunos de tus peores defectos
+    Que dirias que es uno de tus peores desperfectos?
+    Cuentame algunos defectos tuyos
+-->
+
+<category>
+    <pattern> ^ [tu tus el los] ([mayor mayores peor peores]) [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template> Yo diria que mi mayor defecto es que a veces soy muy ambicioso
+    y me obsesiono demasiado con mejorar o al menos ver progreso </template>
+</category>
+
+<category>
+    <pattern> ^ ([uno unos algun algunos]) de [los tus] ([peor peores mayores mayor]) [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<category>
+    <pattern> ^ [un unos algun algunos] ^ [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<category>
+    <pattern> que [defecto+ desperfecto+ imperfeccion+] ^ </pattern>
+    <template><srai> Cual es tu mayor defecto </srai></template>
+</category>
+
+<!--
+    Pregunta 3
+    
+    Cuales son tus 3 mayores virtudes?
+    Podrias contarme algunas de tus mejores virtudes?
+    Cuentame algunas de tus mejores habilidades
+    Me gustaria saber unas de tus mayores capacidades
+    Cual dirias que son unas de las mejores virtudes que tienes?
+--> 
+
+<category>
+    <pattern> ^ [tu tus la las alguna algunas] ^ ([mayor mayores mejor mejores]) [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template> Mis mayores virtudes son la constancia y perseverancia, 
+    la relacion que tengo con los demas y, aunque ciertamente se vea 
+    como un defecto, tambien el deseo de superacion tiene su parte buena </template>
+</category>
+
+<category>
+    <pattern> ^ [una unas alguna algunas] de [las tus] ^ ([mayor mayores mejor mejores]) [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template><srai> Cuales son tus 3 mayores virtudes </srai></template>
+</category>
+
+<category>
+    <pattern> [Di+ Explica+ Habla+ Cuenta+ Describe Manifiesta+ Declara+ Expon+ Proclama+ Afirma+]
+     ^ [habilidad+ virtud+ capacidad+] ^ </pattern>
+    <template><srai> Cuales son tus 3 mayores virtudes </srai></template>
+</category>
+
+<!--
+    Pregunta 4
+
+    Te consideras una persona creativa?
+    Te crees alguien creativo?
+    Dirias que eres algo creativo aunque no estes vivo?
+    Te definirias como algo creativo?
+    Opinas como alguien con creatividad?
+-->
+
+<category>
+    <pattern> (Te) [eres crees consideras definirias opinas] (como) ([alguien algo]) ^ creativ+ ^ </pattern>
+    <template> Entendiendo que todos tenemos dias muy buenos y otros no tanto,
+    si me considero alguien creativo por desarrollar ideas o razonamientos 
+    que no todo el mundo es capaz </template>
+</category>
+
+<category>
+    <pattern> Dirias que eres ([alguien algo]) creativ+ ^ </pattern>
+    <template><srai> Te consideras una persona creativa </srai></template>
+</category>
+
+<!--
+    Pregunta 5
+
+    Por que deberiamos escogerte a ti?
+    Por que tendriamos seleccionarte?
+    Por que no deberiamos contratar a otro?
+    Por que no tendriamos que elegir a otra persona mas cualificada?
+    Deberiamos elegirte para trabajar en la empresa?
+-->
+
+<category>
+    <pattern> (Por que) [deberiamos tendriamos] ^ [escogerte seleccionarte elegirte] ^ </pattern>
+    <template> Creo que tanto la relacion que voy a tener con los compañeros,
+    como la constancia que voy a mostrar son argumentos mas que validos, pero
+    ademas tambien quiero mencionar mi experiencia en este ambito profesional </template>
+</category>
+
+<category>
+    <pattern> Por que no [deberiamos tendriamos] (que) [escoger seleccionar elegir contratar] a otr+ (persona) ^ </pattern>
+    <template><srai> por que deberiamos escogerte a ti </srai></template>
+</category>
+
+</aiml>

@@ -1,0 +1,611 @@
+<?xml version="1.0"
+encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--
+    Comentarios generales:
+        -Fecha, hora y vector_especifico son var. globlales
+        -transform * solo funciona con el año 2020
+        -Si a la hora de reservar una cita no indicas el dia, toma por defecto 2020
+        -Las horas hay que indicarlas con la forma hh:00
+        -Si le introduzco un dia que no esta, por ej del año 1900 o el 31 de febrero, indica que esta ocupado
+        -Horas por la maniana/tarde, si no tiene horas disponibles, en vez de no devolver nada, muestra "no hay horas disponibles :("
+        -Dias libres de la semana, mañana y tarde, si no tiene horas disponibles, en vez de no devolver nada, muestra "no hay horas disponibles esta semana:("
+
+    Por hacer:
+        -Añadir respuestas a los topics
+        -Añadir respuestas con ramdom
+
+    Comentarios particulares:
+        -Para recibir una semana solo necesito el lunes, no necesito que indique el viernes
+-->
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                         JUAN MANUEL MATEOS PEREZ                             |-->
+<!-- |______________________________________________________________________________|-->
+
+<category>
+    <pattern> hola+ </pattern>
+    <template>
+        <think><set var="momento"><srai>day phase</srai></set></think>
+        <condition var="momento">
+            <li><value>Manyana</value>Clinica UGR, buenos dias!</li>
+            <li><value>Tarde</value>Clinica UGR, buenas tardes!</li>
+            <li><value>Noche</value>Clinica UGR, buenas noches!</li>
+        </condition>
+        Que desea?
+    </template>
+</category>
+
+<category>
+    <pattern> muy [buenas buenos] ([dias tardes noches]) </pattern>
+    <template><srai> hola </srai></template>
+</category>
+
+<category>
+    <pattern> ^ cita </pattern>
+    <template> Para cuando? </template>
+</category>
+
+<category>
+    <pattern> ^ (para) ^ (el) dia <set>number</set></pattern>
+    <template>
+        <srai>Quisiera una cita para el dia <star index="3"/> de <srai>month</srai> de 2020 por ejemplo</srai>
+    </template>
+</category>
+
+<category>
+    <pattern> ^ no lo se ^ </pattern>
+    <template> Quiere la cita para esta semana?
+        <think><set name="topic">inseguro semana 1</set></think>
+    </template>
+</category>
+
+<category>
+    <pattern> me da (lo) [igual mismo] </pattern>
+    <template><srai>no lo se</srai></template>
+</category>
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                                  TOPICS                                      |-->
+<!-- |______________________________________________________________________________|-->
+
+<!-- Cuando no tiene claro cuando quiere la cita -->
+<topic name="inseguro semana 1">
+    
+    <!-- Muestra los dias libres de esta semana -->
+    <category>
+        <pattern> ^ si+ ^ </pattern>
+        <template> Pues los dias libres que tengo esta semana son los siguientes: 
+            <srai> dias libres de esta semana </srai>
+        Le interesa alguno?
+            <think><set name="topic">respuesta semana</set></think>
+        </template>
+    </category>
+
+    <!-- Propone la siguiente semana -->
+    <category>
+        <pattern> ^ no+ ^ </pattern>
+        <template>La quiere para la semana que viene?
+            <think><set name="topic">inseguro semana 2</set></think>
+        </template>
+    </category>
+</topic>
+
+<!-- Cuando no tiene claro cuando quiere la cita -->
+<topic name="inseguro semana 2">
+    
+    <!-- Muestra los dias libres de la semana que viene -->
+    <category>
+        <pattern> ^ si+ ^ </pattern>
+        <template> Pues los dias libres que tengo para la semana que viene son: 
+            <srai>dias libres de la proxima semana</srai>
+        Le interesa alguno?
+            <think><set name="topic">respuesta semana</set></think>
+        </template>
+    </category>
+
+    <!-- Se indigna -->
+    <category>
+        <pattern> ^ no+ ^ </pattern>
+        <template>Entonces elija usted el dia!
+            <think><set name="topic">unknown</set></think>
+        </template>
+    </category>
+</topic>
+
+<!-- Respuesta a Le interesa alguno? -->
+<topic name="respuesta semana">
+    
+    <category>
+        <pattern> ^ (si+) el (dia) <set>number</set> de <set>month_es</set> ^ </pattern>
+        <template>
+            <think><set name="topic">unknown</set></think>
+            <srai>Quisiera una cita para el dia <star index="2"/> de <star index="3"/> de 2020</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern> ^ (si+) el (dia) <set>number</set> de <set>month_es</set> ^ a las <set>horas</set> ^ </pattern>
+        <template>
+            <think><set name="topic">unknown</set></think>
+            <srai>Quisiera una cita para el dia <star index="2"/> de <star index="3"/> de 2020 a las <star index="5"/></srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern> ^ si+ </pattern>
+        <template> Cual? </template>
+    </category>
+
+    <category>
+        <pattern> ^ no+ ^ </pattern>
+        <template> 
+            <think>
+                <set var="semana"><srai>dias dentro de 2 semanas</srai></set>
+                <set var="diaa1"><srai> top <get var="semana"/></srai></set>
+                <set var="diaa5"><srai> selectitem 5 in <get var="semana"/></srai></set>
+            </think>
+        Pues ya tendria que ser la semana que va del <get var="diaa1"/> al <get var="diaa5"/>
+        Le parece bien?
+            <think><set name="topic">respuesta semana 2</set></think>
+        </template>
+    </category>
+</topic>
+
+<!--  Respuesta a Le parece bien? -->
+<topic name="respuesta semana 2">
+    
+    <!-- Muestra los dias libres de esa semana -->
+    <category>
+        <pattern> ^ si+ ^ </pattern>
+        <template> Pues los dias libres que tengo esa semana son: 
+            <srai> dias libres dentro de 2 semanas </srai>
+        Le interesa alguno?
+            <think><set name="topic">respuesta semana</set></think>
+        </template>
+    </category>
+
+    <!-- Propone otra semana -->
+    <category>
+        <pattern> ^ no+ (pero) ([puedo]) (tengo libre) la semana del * al * ^ </pattern>
+        <template>
+            <think>
+                <set var="diaa1"><star index="2"/></set>
+                <set var="diaa5"><star index="3"/></set>
+            </think>
+        
+        Okey, pues esa semana tengo libres los dias:
+            <srai>dias libres de la semana <get var="diaa1"/></srai>
+            <think><set name="topic">unknown</set></think>
+        </template>
+    </category>
+
+    <!-- Se enfada -->
+    <category>
+        <pattern> ^ no+ ^ </pattern>
+        <template>Pues usted dira
+            <think><set name="topic">unknown</set></think>
+        </template>
+    </category>
+</topic>
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                                  FUNCIONES                                   |-->
+<!-- |______________________________________________________________________________|-->
+
+<!-- Dados dos dias en el formato "dd-mm-yy" (uno debe ser Lunes y el otro Viernes) indica si esa semana esta libre (FALSE) u ocupada (TRUE)-->
+<!-- semana ocupada 16-03-20 20-03-20 -->
+<category>
+    <pattern> semana ocupada * * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>dias de la semana <star/></srai></set>
+            <set var="contador">1</set>
+            <set var="comprobar"><srai> dia ocupado <srai>selectitem <get var="contador"/> in <get var="vector"/></srai></srai></set>
+        </think>
+        
+        <condition var="comprobar">
+            <li value="FALSE">FALSE</li>
+            <li>
+                <condition var="contador">
+                    <li value="5">TRUE</li>
+                    <li>
+                        <get var="comprobar"/>
+                        <think>
+                            <set var="contador"><map name="successor"><get var="contador"/></map></set>
+                            <set var="comprobar"><srai> dia ocupado <srai>selectitem <get var="contador"/> in <get var="vector"/></srai></srai></set>
+                        </think>
+                    </li>
+                </condition>
+            </li><loop/>
+        </condition>
+    </template>
+</category>
+
+<!-- Obtiene los dias de una semana (introduciendo el lunes correspondiente) -->
+<category>
+    <pattern> dias de la semana * </pattern>
+    <template>
+        <think>
+            <set var="dia1"><star/></set>
+            <set var="dia2"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia1"/></srai></srai></srai></set>
+            <set var="dia3"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia2"/></srai></srai></srai></set>
+            <set var="dia4"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia3"/></srai></srai></srai></set>
+            <set var="dia5"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia4"/></srai></srai></srai></set>
+
+            <set var="vector"><srai>code3 <get var="dia1"/> <get var="dia2"/> <get var="dia3"/> <get var="dia4"/> <get var="dia5"/></srai></set>
+        </think>
+        <get var="vector"/>
+    </template>
+</category>
+
+<!-- Transforma el formato "dd-mm-yy" a "dd mmmmmmm yy"-->
+<category>
+    <pattern> transform2 * </pattern>
+    <template>
+        <think>
+            <set var="dia"><srai>top <srai>transform <star/></srai></srai></set>
+            <set var="mes"><srai>selectitem 3 in <srai>transform <star/></srai></srai></set>
+            
+            <set var="anio_previo"><srai>selectitem 5 in <srai>transform <star/></srai></srai></set>
+            <set var="aux1"><srai> deletrea <get var="anio_previo"/></srai></set>
+            <set var="aux2"><srai> resto <srai> resto <get var="aux1"/></srai></srai></set>
+            <set var="anio"><srai> decode <get var="aux2"/></srai></set>
+       
+            <set var="fecha"><srai>CODE3 <get var="dia"/> <get var="mes"/> <get var="anio"/></srai></set>
+        </think>
+        
+        <get var="fecha"/>
+    </template>
+</category>
+
+<!-- Transforma el formato "dd mmmmmmm yy" a "dd-mm-yy" -->
+<category>
+    <pattern> transform3 * </pattern>
+    <template>
+        <think>
+            <set var="dia"><srai>selectitem 1 in <star/></srai></set>
+            <set var="mes"><srai>selectitem 2 in <star/></srai></set>
+            <set var="anio">20<srai>selectitem 3 in <star/></srai></set>
+            <set var="fecha"><srai>dia <get var="dia"/> de <get var="mes"/> de <get var="anio"/></srai></set>
+        </think>
+        <get var="fecha"/>
+    </template>
+</category>
+
+<!-- Dada una semana, devuelve una lista de sus dias libres (solo hay que introducir el lunes correspondiente) -->
+<!-- dias libres de la semana 09-03-20 -->
+<category>
+    <pattern> dias libres de la semana * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai> dias de la semana <star/></srai></set>
+            <set var="contador">1</set>
+            <set var="veces">1</set>
+        </think>
+
+        <condition var="veces">
+            <li value="6"></li>
+            <li>
+                <think>
+                    <set var="dia"><srai> selectitem <get var="contador"/> in <get var="vector"/></srai></set>
+                    <set var="bool"><srai> dia ocupado <get var="dia"/></srai></set>
+            
+                    <condition var="bool">
+                        <li value="TRUE">
+                            <set var="vector"><srai>removeitem <get var="contador"/> IN <get var="vector"/></srai></set>
+                        </li>
+                        <li><set var="contador"><map name="successor"><get var="contador"/></map></set></li>
+                    </condition>
+                    
+                    <set var="veces"><map name="successor"><get var="veces"/></map></set>
+                </think>
+            <loop/></li>
+        </condition>
+        
+        <think><set var="valor"><srai>count <get var="vector"/></srai></set></think>
+
+        <condition var="valor">
+            <li value="0">No hay dias libres esta semana :(</li>
+            <li><get var="vector"/></li>
+        </condition>
+    </template>
+</category>
+
+<!-- Indica si una mañana dado un dia esta ocupada o no (TRUE si esta ocupada, FALSE si hay hueco)-->
+<category>
+    <pattern> maniana ocupada * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>list of day <star/></srai></set>
+            <set var="vector"><srai>sublist from 9 to 13 of <get var="vector"/></srai></set>
+            <set var="res"><srai>finditem null in <get var="vector"/></srai></set>
+        </think>
+
+        <condition var="res">
+            <li value="0">TRUE</li>
+            <li>FALSE</li>
+        </condition>
+    </template>
+</category>
+
+<!-- Indica si una mañana dado un dia esta ocupada o no (TRUE si esta ocupada, FALSE si hay hueco)-->
+<category>
+    <pattern> tarde ocupada * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>list of day <star/></srai></set>
+            <set var="vector"><srai>sublist from 14 to 21 of <get var="vector"/></srai></set>
+            <set var="res"><srai>finditem null in <get var="vector"/></srai></set>
+        </think>
+
+        <condition var="res">
+            <li value="0">TRUE</li>
+            <li>FALSE</li>
+        </condition>
+    </template>
+</category>
+
+<!-- Devuelve una lista de los dias libres solo por la mañana dado el lunes de una semana -->
+<!-- dias libres solo por la maniana de 02-03-20 -->
+<category>
+    <pattern> dias libres solo por la maniana de * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>dias libres de la semana <star/></srai></set>
+            <set var="max"><srai>count <get var="vector"/></srai></set>
+            <set var="contador">1</set>
+            <set var="veces">0</set>
+        </think>
+
+        <condition var="veces">
+            <li><value><get var="max"/></value></li>
+            <li>
+                <think>
+                    <set var="dia"><srai> selectitem <get var="contador"/> in <get var="vector"/></srai></set>
+                    <set var="bool"><srai> tarde ocupada <get var="dia"/></srai></set>
+            
+                    <condition var="bool">
+                        <li value="FALSE">
+                            <set var="vector"><srai>removeitem <get var="contador"/> IN <get var="vector"/></srai></set>
+                        </li>
+                        <li><set var="contador"><map name="successor"><get var="contador"/></map></set></li>
+                    </condition>
+                    
+                    <set var="veces"><map name="successor"><get var="veces"/></map></set>
+                </think>
+            <loop/></li>
+        </condition>
+        
+        <think><set var="valor"><srai>count <get var="vector"/></srai></set></think>
+
+        <condition var="valor">
+            <li value="0">No hay dias libres solo por la maniana esta semana :(</li>
+            <li><get var="vector"/></li>
+        </condition>
+    </template>
+</category>
+
+<!-- Devuelve una lista de los dias libres solo por la tarde dado el lunes de una semana -->
+<!-- dias libres solo por la tarde de 17-02-20 -->
+<category>
+    <pattern> dias libres solo por la tarde de * </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>dias libres de la semana <star/></srai></set>
+            <set var="max"><srai>count <get var="vector"/></srai></set>
+            <set var="contador">1</set>
+            <set var="veces">0</set>
+        </think>
+
+        <condition var="veces">
+            <li><value><get var="max"/></value></li>
+            <li>
+                <think>
+                    <set var="dia"><srai> selectitem <get var="contador"/> in <get var="vector"/></srai></set>
+                    <set var="bool"><srai> maniana ocupada <get var="dia"/></srai></set>
+            
+                    <condition var="bool">
+                        <li value="FALSE">
+                            <set var="vector"><srai>removeitem <get var="contador"/> IN <get var="vector"/></srai></set>
+                        </li>
+                        <li><set var="contador"><map name="successor"><get var="contador"/></map></set></li>
+                    </condition>
+                    
+                    <set var="veces"><map name="successor"><get var="veces"/></map></set>
+                </think>
+            <loop/></li>
+        </condition>
+        
+        <think><set var="valor"><srai>count <get var="vector"/></srai></set></think>
+
+        <condition var="valor">
+            <li value="0">No hay dias libres solo por la tarde esta semana :(</li>
+            <li><get var="vector"/></li>
+        </condition>
+    </template>
+</category>
+
+<!-- 
+    Muestra los dias de esta semana, por ej:
+    Si estamos a martes, muestra de martes a viernes, incluidos ambos claro
+    Si estamos a sabado, muestra la semana siguiente
+-->
+<category>
+    <pattern> esta semana </pattern>
+    <template>
+        <think>
+            <set var="dia_actual"><srai>day</srai></set>
+            
+            <condition var="dia_actual">
+                <li value="lunes">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on <srai>day</srai></srai></srai></srai></set>
+                </li>
+                <li value="martes">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on <srai>day</srai></srai></srai> valor 4</srai></set>
+                </li>
+                <li value="miercoles">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on <srai>day</srai></srai></srai> valor 3</srai></set>
+                </li>
+                <li value="jueves">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on <srai>day</srai></srai></srai> valor 2</srai></set>
+                </li>
+                <li value="viernes">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on <srai>day</srai></srai></srai> valor 1</srai></set>
+                </li>
+                <li value="sabado">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on lunes</srai></srai></srai></set>
+                </li>
+                <li value="domingo">
+                    <set var="vector"><srai>dias de la semana <srai>transform3 <srai> date on lunes</srai></srai></srai></set>
+                </li>
+            </condition>
+        </think>
+        <get var="vector"/>
+    </template>
+</category>
+
+<!-- Recibe un dia "dd-mm-yy" y un valor k y te da un vector con los k dias consecutivos -->
+<!-- dias de la semana 16-03-20 valor 3 -->
+<category>
+    <pattern> dias de la semana * valor <set>number</set> </pattern>
+    <template>
+        <think>
+            <set var="dia_inicial"><star/></set>
+            <set var="vector"><srai>dias de la semana <get var="dia_inicial"/></srai></set>
+            <set var="n_ele"><srai>count <get var="vector"/></srai></set>
+        
+
+            <condition var="n_ele">
+                <li><value><star index="2"/></value></li>
+                <li>
+                    <set var="vector"><srai>removeitem <get var="n_ele"/> in <get var="vector"/></srai></set>
+                    <set var="n_ele"><srai>count <get var="vector"/></srai></set>
+                <loop/></li>
+            </condition>
+        
+        <set var="vector"><srai> code3 <get var="vector"/></srai></set>
+        </think>
+        
+        <get var="vector"/>
+    </template>
+</category>
+
+<!-- 
+    Devuelve los dias libres de esta semana
+    Se que tengo hecha una funcion que da los dias de esta semana (esta semana) y otra que 
+    consigue los libres dada una semana (dias libres de la semana *), el problema es que 
+    esta segunda necesita que el primero sea lunes y esto puede no ocurrir, por eso 
+    necesito esta nueva funcion 
+-->
+<category>
+    <pattern> dias libres de esta semana </pattern>
+    <template>
+        <think>
+            <set var="vector"><srai>esta semana</srai></set>
+            <set var="contador">1</set>
+            <set var="veces">1</set>
+        </think>
+
+        <condition var="veces">
+            <li value="6"></li>
+            <li>
+                <think>
+                    <set var="dia"><srai> selectitem <get var="contador"/> in <get var="vector"/></srai></set>
+                    <set var="bool"><srai> dia ocupado <get var="dia"/></srai></set>
+            
+                    <condition var="bool">
+                        <li value="TRUE">
+                            <set var="vector"><srai>removeitem <get var="contador"/> IN <get var="vector"/></srai></set>
+                        </li>
+                        <li><set var="contador"><map name="successor"><get var="contador"/></map></set></li>
+                    </condition>
+                    
+                    <set var="veces"><map name="successor"><get var="veces"/></map></set>
+                </think>
+            <loop/></li>
+        </condition>
+        
+        <think><set var="valor"><srai>count <get var="vector"/></srai></set></think>
+
+        <condition var="valor">
+            <li value="0">No hay dias libres esta semana :(</li>
+            <li><get var="vector"/></li>
+        </condition>
+    </template>
+</category>
+
+<!-- 
+    Devuelve los dias de la semana siguiente 
+    Si hoy es lunes, devolvera la siguiente semana, no la semana en la que nos encontramos
+    Si es cualquier otro dia, devolvera la semana siguiente    
+-->
+<category>
+    <pattern> dias de la [proxima siguiente] semana </pattern>
+    <template>
+        <think>
+            <set var="es_lunes"><srai>day</srai></set>
+            <condition var="es_lunes">
+                <li value="lunes">
+                    <set var="dia1"><srai> transform3 <srai>date on lunes</srai></srai></set>
+                    <set var="dia2"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia1"/></srai></srai></srai></set>
+                    <set var="dia3"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia2"/></srai></srai></srai></set>
+                    <set var="dia4"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia3"/></srai></srai></srai></set>
+                    <set var="dia5"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia4"/></srai></srai></srai></set>
+                    <set var="dia6"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia5"/></srai></srai></srai></set>
+                    <set var="dia7"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia6"/></srai></srai></srai></set>
+                    <set var="dia8"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia7"/></srai></srai></srai></set>
+
+                    <set var="vector"><srai>dias de la semana <get var="dia8"/></srai></set>
+                </li>
+                <li>
+                    <set var="primer_lunes"><srai> transform3 <srai>date on lunes</srai></srai></set>   
+                    <set var="vector"><srai>dias de la semana <get var="primer_lunes"/></srai></set>
+                </li>
+            </condition>
+        </think>
+        <get var="vector"/>
+    </template>
+</category>
+
+<!-- 
+    Devuelve los dias libres de la semana siguiente 
+    Si hoy es lunes, devolvera la siguiente semana, no la semana en la que nos encontramos
+    Si es cualquier otro dia, devolvera la semana siguiente    
+-->
+<category>
+    <pattern> dias libres de la [proxima siguiente] semana </pattern>
+    <template><srai>dias libres de la semana <srai>top <srai>dias de la proxima semana</srai></srai></srai></template>
+</category>
+
+<!-- Devuelve los dias dentro de 2 semanas -->
+<category>
+    <pattern> dias dentro de 2 semanas </pattern>
+    <template>
+        <think>
+            <set var="dia1"><srai>top <srai>dias de la proxima semana</srai></srai></set>
+            <set var="dia2"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia1"/></srai></srai></srai></set>
+            <set var="dia3"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia2"/></srai></srai></srai></set>
+            <set var="dia4"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia3"/></srai></srai></srai></set>
+            <set var="dia5"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia4"/></srai></srai></srai></set>
+            <set var="dia6"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia5"/></srai></srai></srai></set>
+            <set var="dia7"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia6"/></srai></srai></srai></set>
+            <set var="dia8"><srai> transform3 <srai>tomorrowdate <srai>transform2 <get var="dia7"/></srai></srai></srai></set>
+
+            <set var="res"><srai>dias de la semana <get var="dia8"/></srai></set>
+        </think>
+        <get var="res"/>
+    </template>
+</category>
+
+<!-- Devuelve los dias libres dentro de 2 semanas -->
+<category>
+    <pattern> dias libres dentro de 2 semanas </pattern>
+    <template><srai>dias libres de la semana <srai>top <srai>dias dentro de 2 semanas</srai></srai></srai></template>
+</category>
+
+</aiml>

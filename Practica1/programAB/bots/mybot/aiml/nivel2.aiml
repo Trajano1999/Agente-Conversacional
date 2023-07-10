@@ -1,0 +1,214 @@
+<?xml version="1.0"
+encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--
+    Comentarios generales:
+        -Fecha, hora y vector_especifico son var. globlales
+        -transform * solo funciona con el año 2020
+        -Si a la hora de reservar una cita no indicas el dia, toma por defecto 2020
+        -Las horas hay que indicarlas con la forma hh:00
+        -Si le introduzco un dia que no esta, por ej del año 1900 o el 31 de febrero, indica que esta ocupado
+        -Horas por la maniana/tarde, si no tiene horas disponibles, en vez de no devolver nada, muestra "no hay horas disponibles :("
+        -Dias libres de la semana, mañana y tarde, si no tiene horas disponibles, en vez de no devolver nada, muestra "no hay horas disponibles esta semana:("
+
+    Por hacer:
+        -Eliminar los valores de las primeras funciones
+
+    Comentarios particulares:
+        -Si hoy es miercoles he indica el proximo miercoles, tomará el dia de hoy, que es el miercoles más cercano
+        -En el set dias_utiles he puesto "pasado maniana", ya que la ñ da fallos
+        -Puede NO haber complemento, esto implica que si indica, por ej "quisiera una cita para hoy a las ajafns" lo trate como "quisiera una cita para hoy"
+-->
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                         JUAN MANUEL MATEOS PEREZ                             |-->
+<!-- |______________________________________________________________________________|-->
+
+<!-- Quisiera una cita para el dia 20 de febrero de 2020 por la tarde -->
+<category>
+    <pattern> ^ cita ^ el (dia) <set>number</set> de <set>month_es</set> de <set>number</set> ([por a] la) <set>horario</set> ^ </pattern>
+    <template>
+        <think>
+            <set name="fecha"><srai>dia <star index="3"/> de <star index="4"/> de <star index="5"/></srai></set>
+            <set var="horario"><star index="6"/></set>
+            <set var="diaocupado"><srai>dia ocupado <get name="fecha"/></srai></set>
+        </think>
+
+        3Espere un segundo, voy a comprobar si hay un hueco
+        ...
+        <condition var="diaocupado">
+            <li value="true">
+        Disculpa, pero el dia <get name="fecha"/> esta ocupado a todas horas
+        ¿Desea otro día?
+                <think><set name="topic">fin</set></think>
+            </li>
+            <li>
+        Las horas libres del dia <get name="fecha"/> por la <get var="horario"/> son:
+            <srai> horas por la <get var="horario"/> de <get name="fecha"/></srai>
+        
+        ¿Le interesa alguna de estas horas?
+                <think><set name="topic">horas</set></think>
+            </li>
+        </condition>
+    </template>
+</category>
+
+<!-- Por si se equivoca introduciendo valores -->
+
+    <!-- Quisiera una cita para el dia gbfhdvf de febrero de 2020 por la tarde -->
+    <category>
+        <pattern> ^ cita ^ el (dia) * de <set>month_es</set> de <set>number</set> ([por a] la) <set>horario</set> ^ </pattern>
+        <template><srai>Quisiera una cita para el dia scdvl de febrero de 2020 a las 17:00</srai></template>
+    </category>
+
+    <!-- Quisiera una cita para el dia 20 de dsgsdv de 2020 por la tarde -->
+    <category>
+        <pattern> ^ cita ^ el (dia) <set>number</set> de * de <set>number</set> ([por a] la) <set>horario</set> ^ </pattern>
+        <template><srai>Quisiera una cita para el dia 20 de vhriusdkvjs de 2020 a las 17:00</srai></template>
+    </category>
+
+    <!-- Quisiera una cita para el dia 20 de febrero de fsdgfsd por la tarde -->
+    <category>
+        <pattern> ^ cita ^ el (dia) <set>number</set> de <set>month_es</set> de * ([por a] la) <set>horario</set> ^ </pattern>
+        <template><srai>Quisiera una cita para el dia 20 de febrero de cndsjvnks a las 17:00</srai></template>
+    </category>
+
+    <!-- Quisiera una cita para el dia 20 de febrero de 2020 por la vrdfg -->
+    <category>
+        <pattern> ^ cita ^ el (dia) <set>number</set> de <set>month_es</set> de <set>number</set> ([por a] la) * ^ </pattern>
+        <template> Disculpe, pero ha introducido el horario de manera incorrecta </template>
+    </category>
+
+<!-- Quisiera una cita para hoy por la tarde -->
+<category>
+    <pattern> ^ cita ^ <set>dias_utiles</set> ([por a] la) <set>horario</set> ^ </pattern>
+    <template>
+        <think>
+            <set var="horario"><star index="4"/></set>
+            <srai>dia util <star index="3"/></srai>
+        </think>
+
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai> ([por a] la) <get var="horario"/></srai>
+    </template>
+</category>
+
+<!-- Quisiera una cita para hoy a las 17:00 -->
+<category>
+    <pattern> ^ cita ^ <set>dias_utiles</set> a las <set>horas</set> ^ </pattern>
+    <template>
+        <think>
+            <set var="hora"><star index="4"/></set>
+            <srai>dia util <star index="3"/></srai>
+        </think>
+       
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai> a las <get var="hora"/></srai>
+    </template>
+</category>
+
+<!-- Quisiera una cita para hoy -->
+<category>
+    <pattern> ^ cita ^ <set>dias_utiles</set> ^ </pattern>
+    <template>
+        <think>
+            <set var="dia_util"><star index="3"/></set>
+            <srai>dia util <get var="dia_util"/></srai>
+        </think>
+
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai></srai>
+    </template>
+</category>
+
+<!-- Quisiera una cita para el proximo lunes por la tarde -->
+<category>
+    <pattern> ^ cita ^ [proximo siguiente] <set>dia_semana</set> ([por a] la) <set>horario</set> ^ </pattern>
+    <template>
+        <think>
+            <set var="horario"><star index="4"/></set>
+            <srai>proximo <star index="3"/></srai>
+        </think>
+        
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai> por la <get var="horario"/></srai>
+    </template>
+</category>
+
+<!-- Quisiera una cita para el proximo lunes a las 17:00 -->
+<category>
+    <pattern> ^ cita ^ [proximo siguiente] <set>dia_semana</set> a las <set>horas</set> ^ </pattern>
+    <template>
+        <think>
+            <set var="hora"><star index="4"/></set>
+            <srai>proximo <star index="3"/></srai>
+        </think>
+        
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai> a las <get var="hora"/></srai>
+    </template>
+</category>
+
+<!-- Quisiera una cita para el proximo lunes -->
+<category>
+    <pattern> ^ cita ^ [proximo siguiente] <set>dia_semana</set> ^ </pattern>
+    <template>
+        <think>
+            <srai>proximo <star index="3"/></srai>
+        </think>
+
+        <srai>Quisiera una cita para el dia <srai>transform <get name="fecha"/></srai></srai>
+    </template>
+</category>
+
+<!--  ______________________________________________________________________________ -->
+<!-- |                                                                              |-->
+<!-- |                                  FUNCIONES                                   |-->
+<!-- |______________________________________________________________________________|-->
+
+<!-- Recibe [hoy maniana pasado maniana] y modifica fecha al dia que corresponda -->
+<category>
+    <pattern> dia util <set>dias_utiles</set></pattern>
+    <template>
+        <think>
+            <set var="dia_util"><star/></set>
+        </think>
+
+        <condition var="dia_util">
+            <li><value>hoy</value>
+                <think>
+                    <set var="dia"><srai>top <srai>date</srai></srai></set>
+                    <set var="mes"><srai>selectitem 2 in <srai>date</srai></srai></set>
+                    <set name="fecha"><srai>dia <get var="dia"/> de <get var="mes"/> de 2020</srai></set>
+                </think>
+            </li>
+            <li><value>maniana</value>
+                <think>
+                    <set var="dia"><srai>top <srai>date tomorrow</srai></srai></set>
+                    <set var="mes"><srai>selectitem 2 in <srai>date tomorrow</srai></srai></set>
+                    <set name="fecha"><srai>dia <get var="dia"/> de <get var="mes"/> de 2020</srai></set>
+                </think>
+            </li>
+            <li><value>pasado maniana</value>
+                <think>
+                    <set var="dia"><srai>top <srai>tomorrowdate <srai> date tomorrow </srai></srai></srai></set>
+                    <set var="mes"><srai>selectitem 2 in <srai>tomorrowdate <srai> date tomorrow </srai></srai></srai></set>
+                    <set name="fecha"><srai>dia <get var="dia"/> de <get var="mes"/> de 2020</srai></set>
+                </think>
+            </li>
+        </condition>
+    </template>
+</category>
+
+<!-- Recibe un dia de la semana y modifica fecha "dd-mm-yy" al siguiente dia que corresponda -->
+<category>
+    <pattern> proximo <set>dia_semana</set></pattern>
+    <template>
+        <think> 
+            <set var="dia_semana"><star/></set>
+    
+            <set var="dia"><srai>top <srai>date on <get var="dia_semana"/></srai></srai></set>
+            <set var="mes"><srai>selectitem 2 in <srai>date on <get var="dia_semana"/></srai></srai></set>
+            <set name="fecha"><srai>dia <get var="dia"/> de <get var="mes"/> de 2020</srai></set>
+        </think>
+    </template>
+</category>
+
+</aiml>

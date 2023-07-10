@@ -1,0 +1,28 @@
+==========================
+= versión del 30/03/2020 =
+==========================
+- Corregido bug de la casilla de recarga
+- Corregido error de confunsión en la ventana de configuración entre filas y columnas
+- Corregido en el fichero jugador.cpp la consideración de las zapatillas (casilla con valor 'D') como un obstáculo.
+
+==========================
+= versión del 23/04/2020 =
+==========================
+- Corregido un problema para la compilación de BelkanSG en Windows.
+
+El 29 de Marzo de este año salió una nueva versión de CodeBlocks. En esta nueva versión aparecen algunas modificaciones que hacen que el software de la práctica 2 para windows no se pueda compilar. 
+Pasa solucionar este problema usar la versión 17.12 de CodeBlocks con su versión asociada del compilador mingw. Para descargar esta versión pinchar en el siguiente enlace https://sourceforge.net/projects/codeblocks/files/Binaries/17.12/Windows/ y seleccionar la opción "codeblocks-17.12mingw-setup.exe".
+
+
+==========================
+= versión del 07/05/2020 =
+==========================
+- Corregido un problema en la contabilidad de de las colisiones del agente en versiones tanto de Windows como de Linux.
+
+==========================
+= versión del 13/05/2020 =
+==========================
+- Corregida una errata que se producía cuando el número de iteraciones se consumía antes que la batería. Esto afectaba tanto a la versión de windows como a la de linux.
+- Añadida a la salida final el número de instantes de simulación no consumidos.
+
+
