@@ -18,7 +18,7 @@ Para obtener un conocimiento más detallado del código, este se encuentra en ``
 
 ## Ejecución
 
-Para ejecutar el bot en **Linux**,  es necesario otorgar permisos de ejecución al archivo ``run.sh`` y, a continuación, proceder con su ejecución de la siguiente manera: 
+Para ejecutar el bot en **Linux**,  es necesario otorgar permisos de ejecución al archivo ``run.sh`` y, a continuación, proceder con su ejecución de la siguiente manera:
 
 ````
 chmod +x run.sh
