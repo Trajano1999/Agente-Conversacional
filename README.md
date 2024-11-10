@@ -1,27 +1,28 @@
 # Agente Conversacional
 
-Práctica de la asignatura de **Inteligencia Artificial**.
+Práctica de la asignatura de **Inteligencia Artificial** del Doble Grado en Ingeniería Informática y Matemáticas de la Universidad de Granada.
 
 ## Descripción
 
-Este programa consiste en un bot que simula conersaciones reales de distintos temas, es decir, un agente conversacional. Está dividido en 4 niveles que se explican a continuación.
+Este programa consiste en un bot diseñado para simular conversaciones reales enfocadas en la gestión de un negocio. Se estructura en cuatro niveles, los cuales se detallan a continuación:
 
-0. Este nivel es el inicial ya que consta solamente de 5 preguntas de tipo entrevista con las que el bot responderá con una respuesta estipulada. Sirve para aprender a manejarse con el bot.
+0. El nivel inicial es introductorio, y consta de cinco preguntas tipo entrevista a las que el bot responde con respuestas predefinidas. Su propósito es familiarizar al usuario con el manejo del bot.
 
-1. El primer nivel es bastante básico, pero ya permite reservar citas en distintas horas del día, comienza a distinguir respuestas y se adapta a los gustos del usuario en bajos niveles de incertidumbre.
+1. El primer nivel es bastante básico, pero ya permite realizar reservas a distintas horas del día. Además, comienza a reconocer respuestas y se adapta a las preferencias del usuario en situaciones con baja incertidumbre.
 
-2. El segundo nivel ya comienza a entender expresiones básicas como "mañana por la tarde" o "la próxima semana", que se parecen algo más al lenguage que usamos diariamente. Permite además modificar reservas.
+2. En el segundo nivel, el bot comienza a comprender expresiones básicas como "mañana por la tarde" o "la próxima semana", acercándose al lenguage cotidiano. Permite además modificar reservas previamente realizadas.
 
-3. Finalmente este nivel es el más avanzado. En este nivel, si solicitas una cita en una hora ocupada te ofrece horas cercanas por si te interesan, adaptandose más al comportamiento del usuario. También puede mostrar algunos sentimientos de ira o enfado si el cliente no se decide o incluso mostrar los dias disponibles del resto de la semana.
+3. El último nivel es el más avanzado. En este nivel, si solicitas una cita en un horario ocupado, el bot sugiere horarios cercanos, adaptandose mejor al comportamiento del usuario. También puede mostrar algunos sentimientos de ira o frustración si el cliente no toma una decisión, o incluso presentar la disponibilidad de los días restantes de la semana.
 
-Espero que se disfrute de su uso. Para conocer más a fondo el código o buscar más preguntas, el código se encuentra en `bots/mybot/aiml`.
+Para obtener un conocimiento más detallado del código, este se encuentra en ``bots/mybot/aiml``.
 
 ## Ejecución
 
-Para ejecutar este bot en **Linux**, en primer lugar debemos dar permisos de ejecución al archivo `run.sh`, y posteriormente ejecutarlo. Para ello escribiremos : 
+Para ejecutar el bot en **Linux**,  es necesario otorgar permisos de ejecución al archivo `run.sh` y, a continuación, proceder con su ejecución de la siguiente manera: 
 
-`chmod +x run.sh`
+````
+chmod +x run.sh
+./run.sh
+````
 
-`./run.sh`
-
-Tras esto, ya podremos entablar la primera conversación. Para buscar ejemplos de conversaciones podemos acceder al documento `Preguntas.pdf`.
+Tras esto, podrá iniciarse la primera interacción con el bot. Para consultar ejemplos de conversaciones, se puede acceder al documento ``Preguntas.pdf``.
