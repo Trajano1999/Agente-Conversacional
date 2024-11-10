@@ -14,7 +14,7 @@ Este programa consiste en un bot diseñado para simular conversaciones reales en
 
 3. El último nivel es el más avanzado. En este nivel, si solicitas una cita en un horario ocupado, el bot sugiere horarios cercanos, adaptandose mejor al comportamiento del usuario. También puede mostrar algunos sentimientos de ira o frustración si el cliente no toma una decisión, o incluso presentar la disponibilidad de los días restantes de la semana.
 
-Para obtener un conocimiento más detallado del código, este se encuentra en ``bots/mybot/aiml``.
+Para teber un conocimiento más detallado del código, acceder a ``bots/mybot/aiml``.
 
 ## Ejecución
 
